@@ -11,11 +11,12 @@ import {
   to,
   useNotification,
   useOverlayBlocker,
+  useFetchClient,
 } from '@strapi/helper-plugin';
 import { Main } from '@strapi/design-system/Main';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { useModels, useFetchClient } from '../../../../../hooks';
+import { useModels } from '../../../../../hooks';
 import WebhookForm from './components/WebhookForm';
 import cleanData from './utils/formatData';
 
