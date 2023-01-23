@@ -5,7 +5,7 @@ import { Select, Option } from '@strapi/design-system/Select';
 import { useQuery } from 'react-query';
 import styled, { keyframes } from 'styled-components';
 import LoadingIcon from '@strapi/icons/Loader';
-import { getFetchClient } from '../../../../../../utils/getFetchClient';
+import { getFetchClient } from '@strapi/helper-plugin';
 
 const rotation = keyframes`
   from {
