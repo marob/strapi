@@ -18,11 +18,7 @@ jest.mock('@strapi/helper-plugin', () => ({
   useGuidedTour: jest.fn(() => ({
     startSection: jest.fn(),
   })),
-}));
-
-jest.mock('../../../../../../utils/getFetchClient', () => ({
-  ...jest.requireActual('../../../../../../utils/getFetchClient'),
-  getFetchClient: jest.fn().mockReturnValue({
+  useFetchClient: jest.fn().mockReturnValue({
     get: jest.fn().mockResolvedValue({
       data: {
         data: [
