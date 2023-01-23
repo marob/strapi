@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useMemo, useReducer } from 'react';
 import { useParams } from 'react-router-dom';
-import { CheckPagePermissions, LoadingIndicatorPage, getFetchClient } from '@strapi/helper-plugin';
+import { CheckPagePermissions, LoadingIndicatorPage, useFetchClient } from '@strapi/helper-plugin';
 import { useSelector, shallowEqual } from 'react-redux';
 import axios from 'axios';
 import { getRequestUrl, mergeMetasWithSchema } from '../../utils';
@@ -17,11 +17,11 @@ const ComponentSettingsView = () => {
   const schemasSelector = useMemo(makeSelectModelAndComponentSchemas, []);
   const { schemas } = useSelector((state) => schemasSelector(state), shallowEqual);
   const { uid } = useParams();
+  const { get } = useFetchClient();
 
   useEffect(() => {
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
-    const { get } = getFetchClient();
 
     const fetchData = async (source) => {
       try {
@@ -48,6 +48,7 @@ const ComponentSettingsView = () => {
     return () => {
       source.cancel('Operation canceled by the user.');
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uid, schemas]);
 
   if (isLoading) {
