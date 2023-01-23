@@ -2,12 +2,12 @@ import React from 'react';
 import { QueryClientProvider, QueryClient } from 'react-query';
 import { renderHook, act } from '@testing-library/react-hooks';
 
-import { getFetchClient } from '@strapi/helper-plugin';
+import { useFetchClient } from '@strapi/helper-plugin';
 import { useRelation } from '../useRelation';
 
 jest.mock('@strapi/helper-plugin', () => ({
   ...jest.requireActual('@strapi/helper-plugin'),
-  getFetchClient: jest.fn().mockReturnValue({
+  useFetchClient: jest.fn().mockReturnValue({
     get: jest.fn().mockResolvedValue({
       data: {
         results: [
@@ -85,7 +85,7 @@ describe('useRelation', () => {
       },
     });
 
-    const { get } = getFetchClient();
+    const { get } = useFetchClient();
 
     await waitFor(() => expect(get).toBeCalledTimes(1));
 
@@ -112,7 +112,7 @@ describe('useRelation', () => {
       title: 'xToOne relation',
     };
 
-    getFetchClient().get = jest.fn().mockResolvedValueOnce({
+    useFetchClient().get = jest.fn().mockResolvedValueOnce({
       data: {
         data: FIXTURE,
       },
@@ -136,7 +136,7 @@ describe('useRelation', () => {
 
     await waitForNextUpdate();
 
-    const { get } = getFetchClient();
+    const { get } = useFetchClient();
 
     expect(get).toBeCalledWith(expect.any(String), {
       params: {
@@ -148,7 +148,7 @@ describe('useRelation', () => {
 
   test('does not fetch relations if it was not enabled', async () => {
     await setup({ relation: { enabled: false } });
-    const { get } = getFetchClient();
+    const { get } = useFetchClient();
 
     expect(get).not.toBeCalled();
   });
@@ -158,7 +158,7 @@ describe('useRelation', () => {
 
     await waitForNextUpdate();
 
-    const { get } = getFetchClient();
+    const { get } = useFetchClient();
 
     expect(result.current.relations.isSuccess).toBe(true);
     expect(get).toBeCalledTimes(1);
@@ -171,7 +171,7 @@ describe('useRelation', () => {
   });
 
   test('fetch relations next page, if there is one', async () => {
-    getFetchClient().get = jest.fn().mockResolvedValueOnce({
+    useFetchClient().get = jest.fn().mockResolvedValueOnce({
       data: {
         results: [],
         pagination: {
@@ -181,7 +181,7 @@ describe('useRelation', () => {
       },
     });
 
-    const { get } = getFetchClient();
+    const { get } = useFetchClient();
 
     const { result, waitForNextUpdate } = await setup();
 
@@ -209,7 +209,7 @@ describe('useRelation', () => {
   });
 
   test("does not fetch relations next page, if there isn't one", async () => {
-    getFetchClient().get = jest.fn().mockResolvedValueOnce({
+    useFetchClient().get = jest.fn().mockResolvedValueOnce({
       data: {
         results: [],
         pagination: {
@@ -219,7 +219,7 @@ describe('useRelation', () => {
       },
     });
 
-    const { get } = getFetchClient();
+    const { get } = useFetchClient();
 
     const { result, waitForNextUpdate } = await setup();
 
@@ -250,7 +250,7 @@ describe('useRelation', () => {
     const spy = jest
       .fn()
       .mockResolvedValue({ data: { results: [], pagination: { page: 1, pageCount: 2 } } });
-    getFetchClient().get = spy;
+    useFetchClient().get = spy;
 
     act(() => {
       result.current.searchFor('something');
@@ -272,7 +272,7 @@ describe('useRelation', () => {
     const spy = jest
       .fn()
       .mockResolvedValue({ data: { values: [], pagination: { page: 1, pageCount: 2 } } });
-    getFetchClient().get = spy;
+    useFetchClient().get = spy;
 
     act(() => {
       result.current.searchFor('something');
@@ -296,7 +296,7 @@ describe('useRelation', () => {
     const spy = jest
       .fn()
       .mockResolvedValue({ data: { results: [], pagination: { page: 1, pageCount: 2 } } });
-    getFetchClient().get = spy;
+    useFetchClient().get = spy;
 
     act(() => {
       result.current.searchFor('something');
@@ -333,7 +333,7 @@ describe('useRelation', () => {
     const spy = jest.fn().mockResolvedValueOnce({
       data: { results: [], pagination: { page: 1, pageCount: 1 } },
     });
-    getFetchClient().get = spy;
+    useFetchClient().get = spy;
 
     act(() => {
       result.current.searchFor('something');

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useInfiniteQuery } from 'react-query';
 
-import { getFetchClient } from '@strapi/helper-plugin';
+import { useFetchClient } from '@strapi/helper-plugin';
 
 import { normalizeRelations } from '../../components/RelationInputDataManager/utils';
 
@@ -10,7 +10,7 @@ import { useCallbackRef } from '../useCallbackRef';
 export const useRelation = (cacheKey, { relation, search }) => {
   const [searchParams, setSearchParams] = useState({});
   const [currentPage, setCurrentPage] = useState(0);
-  const { get } = getFetchClient();
+  const { get } = useFetchClient();
   /**
    * This runs in `useInfiniteQuery` to actually fetch the data
    */
