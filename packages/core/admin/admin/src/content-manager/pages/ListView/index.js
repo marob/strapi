@@ -14,7 +14,7 @@ import {
   NoPermissions,
   CheckPermissions,
   SearchURLQuery,
-  getFetchClient,
+  useFetchClient,
   useFocusWhenNavigate,
   useQueryParams,
   useNotification,
@@ -94,6 +94,7 @@ function ListView({
   const { pathname } = useLocation();
   const { push } = useHistory();
   const { formatMessage } = useIntl();
+  const fetchClient = useFetchClient();
   const contentType = layout.contentType;
   const hasDraftAndPublish = get(contentType, 'options.draftAndPublish', false);
 
@@ -105,7 +106,6 @@ function ListView({
   const fetchData = useCallback(
     async (endPoint, source) => {
       getData();
-      const fetchClient = getFetchClient();
 
       try {
         const opts = source ? { cancelToken: source.token } : null;
@@ -154,15 +154,15 @@ function ListView({
         });
       }
     },
+    // TODO: remove when we evaluate the need of the useCallback
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [formatMessage, getData, getDataSucceeded, notifyStatus, push, toggleNotification]
   );
 
   const handleConfirmDeleteAllData = useCallback(
     async (ids) => {
       try {
-        const { post } = getFetchClient();
-
-        await post(getRequestUrl(`collection-types/${slug}/actions/bulkDelete`), {
+        await fetchClient.post(getRequestUrl(`collection-types/${slug}/actions/bulkDelete`), {
           ids,
         });
 
@@ -176,15 +176,15 @@ function ListView({
         });
       }
     },
+    // TODO: remove when we evaluate the need of the useCallback
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [fetchData, params, slug, toggleNotification]
   );
 
   const handleConfirmDeleteData = useCallback(
     async (idToDelete) => {
       try {
-        const { del } = getFetchClient();
-
-        await del(getRequestUrl(`collection-types/${slug}/${idToDelete}`));
+        await fetchClient.del(getRequestUrl(`collection-types/${slug}/${idToDelete}`));
 
         const requestUrl = getRequestUrl(`collection-types/${slug}${params}`);
         fetchData(requestUrl);
@@ -206,6 +206,8 @@ function ListView({
         });
       }
     },
+    // TODO: remove when we evaluate the need of the useCallback
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [slug, params, fetchData, toggleNotification, formatMessage]
   );
 
