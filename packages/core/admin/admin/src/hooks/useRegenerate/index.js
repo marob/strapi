@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { get } from 'lodash';
-import { getFetchClient, useNotification } from '@strapi/helper-plugin';
+import { useFetchClient, useNotification } from '@strapi/helper-plugin';
 
 const useRegenerate = (id, onRegenerate) => {
   const [isLoadingConfirmation, setIsLoadingConfirmation] = useState(false);
   const toggleNotification = useNotification();
-  const { post } = getFetchClient();
+  const { post } = useFetchClient();
 
   const regenerateData = async () => {
     try {
