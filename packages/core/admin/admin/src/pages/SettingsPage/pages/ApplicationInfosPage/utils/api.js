@@ -1,4 +1,4 @@
-import { getFetchClient } from '../../../../../utils/getFetchClient';
+import { getFetchClient } from '@strapi/helper-plugin';
 import prefixAllUrls from './prefixAllUrls';
 
 const fetchProjectSettings = async () => {
@@ -10,7 +10,11 @@ const fetchProjectSettings = async () => {
 
 const postProjectSettings = async (body) => {
   const { post } = getFetchClient();
-  const { data } = await post('/admin/project-settings', body);
+  const { data } = await post('/admin/project-settings', body, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 
   return prefixAllUrls(data);
 };
