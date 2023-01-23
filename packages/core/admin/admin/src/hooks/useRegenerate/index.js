@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { get } from 'lodash';
-import { useNotification } from '@strapi/helper-plugin';
-import { getFetchClient } from '../../utils/getFetchClient';
+import { getFetchClient, useNotification } from '@strapi/helper-plugin';
 
 const useRegenerate = (id, onRegenerate) => {
   const [isLoadingConfirmation, setIsLoadingConfirmation] = useState(false);
