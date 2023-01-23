@@ -15,12 +15,17 @@ import { Stack } from '@strapi/design-system/Stack';
 import { Typography } from '@strapi/design-system/Typography';
 
 import { Formik } from 'formik';
-import { Form, GenericInput, useNotification, useOverlayBlocker } from '@strapi/helper-plugin';
+import {
+  Form,
+  GenericInput,
+  useNotification,
+  useOverlayBlocker,
+  useFetchClient,
+} from '@strapi/helper-plugin';
 import { useQueryClient, useMutation } from 'react-query';
 import formDataModel from 'ee_else_ce/pages/SettingsPage/pages/Users/ListPage/ModalForm/utils/formDataModel';
 import roleSettingsForm from 'ee_else_ce/pages/SettingsPage/pages/Users/ListPage/ModalForm/utils/roleSettingsForm';
 import MagicLink from 'ee_else_ce/pages/SettingsPage/pages/Users/components/MagicLink';
-import { useFetchClient } from '../../../../../../hooks';
 import SelectRoles from '../../components/SelectRoles';
 import layout from './utils/layout';
 import schema from './utils/schema';
