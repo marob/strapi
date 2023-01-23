@@ -1,4 +1,4 @@
-import { getFetchClient } from '../../../utils/getFetchClient';
+import { getFetchClient } from '@strapi/helper-plugin';
 
 const fetchEnabledPlugins = async () => {
   const { get } = getFetchClient();
