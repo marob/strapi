@@ -14,6 +14,7 @@ import {
   NoPermissions,
   CheckPermissions,
   SearchURLQuery,
+  getFetchClient,
   useFocusWhenNavigate,
   useQueryParams,
   useNotification,
@@ -32,8 +33,6 @@ import { Button } from '@strapi/design-system/Button';
 import ArrowLeft from '@strapi/icons/ArrowLeft';
 import Plus from '@strapi/icons/Plus';
 import Cog from '@strapi/icons/Cog';
-
-import { getFetchClient } from '../../../utils/getFetchClient';
 
 import DynamicTable from '../../components/DynamicTable';
 import AttributeFilter from '../../components/AttributeFilter';
