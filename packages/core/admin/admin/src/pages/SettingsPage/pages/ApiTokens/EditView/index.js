@@ -9,13 +9,13 @@ import {
   useTracking,
   useGuidedTour,
   useRBAC,
+  useFetchClient,
 } from '@strapi/helper-plugin';
 import { Main } from '@strapi/design-system/Main';
 import { Formik } from 'formik';
 import { useRouteMatch, useHistory } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { formatAPIErrors } from '../../../../../utils';
-import { useFetchClient } from '../../../../../hooks';
 import { schema } from './utils';
 import LoadingView from './components/LoadingView';
 import FormHead from './components/FormHead';
