@@ -31,10 +31,6 @@ jest.mock('@strapi/helper-plugin', () => ({
     lockApp: jest.fn(),
     unlockApp: jest.fn(),
   })),
-}));
-
-jest.mock('../../../../../../hooks', () => ({
-  ...jest.requireActual('../../../../../../hooks'),
   useFetchClient: jest.fn().mockReturnValue({
     get: jest.fn().mockImplementation((path) => {
       if (path === '/admin/content-api/permissions') {
