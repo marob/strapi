@@ -2,7 +2,7 @@ import {
   useNotification,
   useRBACProvider,
   useStrapiApp,
-  getFetchClient,
+  useFetchClient,
 } from '@strapi/helper-plugin';
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,7 +26,7 @@ const useModels = () => {
   const source = CancelToken.source();
   const { notifyStatus } = useNotifyAT();
   const { formatMessage } = useIntl();
-  const { get } = getFetchClient();
+  const { get } = useFetchClient();
 
   const fetchData = async () => {
     dispatch(getData());
