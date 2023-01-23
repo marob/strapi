@@ -27,7 +27,6 @@ const Loader = () => (
 );
 
 const fetchData = async () => {
-  console.log('fetchRoles');
   const { get } = getFetchClient();
   const { data } = await get('/admin/roles');
 
