@@ -4,7 +4,7 @@ import useRegenerate from '../index';
 jest.mock('@strapi/helper-plugin', () => ({
   ...jest.requireActual('@strapi/helper-plugin'),
   useNotification: jest.fn(),
-  getFetchClient: jest.fn().mockReturnValue({
+  useFetchClient: jest.fn().mockReturnValue({
     get: jest.fn().mockResolvedValue({
       data: {
         data: {
