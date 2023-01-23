@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
+import { getFetchClient } from '@strapi/helper-plugin';
 import { Components, Fields, Middlewares, Reducers } from './core/apis';
-import { getFetchClient } from './utils/getFetchClient';
 import appCustomisations from './app';
 // eslint-disable-next-line import/extensions
 import plugins from './plugins';
