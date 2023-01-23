@@ -1,5 +1,5 @@
 import omit from 'lodash/omit';
-import { getFetchClient } from '../../../utils/getFetchClient';
+import { getFetchClient } from '@strapi/helper-plugin';
 
 const fetchUser = async () => {
   const { get } = getFetchClient();
