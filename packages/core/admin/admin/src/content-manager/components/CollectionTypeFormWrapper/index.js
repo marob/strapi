@@ -10,7 +10,7 @@ import {
   formatContentTypeData,
   contentManagementUtilRemoveFieldsFromData,
   useGuidedTour,
-  getFetchClient,
+  useFetchClient,
 } from '@strapi/helper-plugin';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -50,6 +50,7 @@ const CollectionTypeFormWrapper = ({ allLayoutData, children, slug, id, origin }
   const trackUsageRef = useRef(trackUsage);
 
   const allLayoutDataRef = useRef(allLayoutData);
+  const fetchClient = useFetchClient();
 
   const isCreatingEntry = id === null;
 
@@ -135,7 +136,6 @@ const CollectionTypeFormWrapper = ({ allLayoutData, children, slug, id, origin }
 
     const fetchData = async (source) => {
       dispatch(getData());
-      const fetchClient = getFetchClient();
 
       try {
         const { data } = await fetchClient.get(requestURL, { cancelToken: source.token });
@@ -187,6 +187,7 @@ const CollectionTypeFormWrapper = ({ allLayoutData, children, slug, id, origin }
     return () => {
       source.cancel('Operation canceled by the user.');
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     cleanClonedData,
     cleanReceivedData,
@@ -217,11 +218,10 @@ const CollectionTypeFormWrapper = ({ allLayoutData, children, slug, id, origin }
 
   const onDelete = useCallback(
     async (trackerProperty) => {
-      const { del } = getFetchClient();
       try {
         trackUsageRef.current('willDeleteEntry', trackerProperty);
 
-        const { data } = await del(getRequestUrl(`collection-types/${slug}/${id}`));
+        const { data } = await fetchClient.del(getRequestUrl(`collection-types/${slug}/${id}`));
 
         toggleNotification({
           type: 'success',
@@ -237,6 +237,8 @@ const CollectionTypeFormWrapper = ({ allLayoutData, children, slug, id, origin }
         return Promise.reject(err);
       }
     },
+    // TODO: remove when we evaluate the need of the useCallback
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [id, slug, toggleNotification]
   );
 
@@ -247,13 +249,12 @@ const CollectionTypeFormWrapper = ({ allLayoutData, children, slug, id, origin }
   const onPost = useCallback(
     async (body, trackerProperty) => {
       const endPoint = `${getRequestUrl(`collection-types/${slug}`)}${rawQuery}`;
-      const { post } = getFetchClient();
 
       try {
         // Show a loading button in the EditView/Header.js && lock the app => no navigation
         dispatch(setStatus('submit-pending'));
 
-        const { data } = await post(endPoint, body);
+        const { data } = await fetchClient.post(endPoint, body);
 
         trackUsageRef.current('didCreateEntry', trackerProperty);
         toggleNotification({
@@ -282,6 +283,8 @@ const CollectionTypeFormWrapper = ({ allLayoutData, children, slug, id, origin }
         return Promise.reject(err);
       }
     },
+    // TODO: remove when we evaluate the need of the useCallback
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       cleanReceivedData,
       displayErrors,
@@ -296,7 +299,6 @@ const CollectionTypeFormWrapper = ({ allLayoutData, children, slug, id, origin }
   );
 
   const onDraftRelationCheck = useCallback(async () => {
-    const fetchClient = getFetchClient();
     try {
       trackUsageRef.current('willCheckDraftRelations');
 
@@ -317,17 +319,18 @@ const CollectionTypeFormWrapper = ({ allLayoutData, children, slug, id, origin }
 
       return Promise.reject(err);
     }
+    // TODO: remove when we evaluate the need of the useCallback
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displayErrors, id, slug, dispatch]);
 
   const onPublish = useCallback(async () => {
-    const { post } = getFetchClient();
     try {
       trackUsageRef.current('willPublishEntry');
       const endPoint = getRequestUrl(`collection-types/${slug}/${id}/actions/publish`);
 
       dispatch(setStatus('publish-pending'));
 
-      const { data } = await post(endPoint);
+      const { data } = await fetchClient.post(endPoint);
 
       trackUsageRef.current('didPublishEntry');
 
@@ -346,11 +349,12 @@ const CollectionTypeFormWrapper = ({ allLayoutData, children, slug, id, origin }
 
       return Promise.reject(err);
     }
+    // TODO: remove when we evaluate the need of the useCallback
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cleanReceivedData, displayErrors, id, slug, dispatch, toggleNotification]);
 
   const onPut = useCallback(
     async (body, trackerProperty) => {
-      const { put } = getFetchClient();
       const endPoint = getRequestUrl(`collection-types/${slug}/${id}`);
 
       try {
@@ -358,7 +362,7 @@ const CollectionTypeFormWrapper = ({ allLayoutData, children, slug, id, origin }
 
         dispatch(setStatus('submit-pending'));
 
-        const { data } = await put(endPoint, body);
+        const { data } = await fetchClient.put(endPoint, body);
 
         trackUsageRef.current('didEditEntry', { trackerProperty });
         toggleNotification({
@@ -383,11 +387,12 @@ const CollectionTypeFormWrapper = ({ allLayoutData, children, slug, id, origin }
         return Promise.reject(err);
       }
     },
+    // TODO: remove when we evaluate the need of the useCallback
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [cleanReceivedData, displayErrors, slug, id, dispatch, toggleNotification, queryClient]
   );
 
   const onUnpublish = useCallback(async () => {
-    const { post } = getFetchClient();
     const endPoint = getRequestUrl(`collection-types/${slug}/${id}/actions/unpublish`);
 
     dispatch(setStatus('unpublish-pending'));
@@ -395,7 +400,7 @@ const CollectionTypeFormWrapper = ({ allLayoutData, children, slug, id, origin }
     try {
       trackUsageRef.current('willUnpublishEntry');
 
-      const { data } = await post(endPoint);
+      const { data } = await fetchClient.post(endPoint);
 
       trackUsageRef.current('didUnpublishEntry');
       toggleNotification({
@@ -413,6 +418,8 @@ const CollectionTypeFormWrapper = ({ allLayoutData, children, slug, id, origin }
 
       return Promise.reject(err);
     }
+    // TODO: remove when we evaluate the need of the useCallback
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cleanReceivedData, displayErrors, id, slug, dispatch, toggleNotification]);
 
   return children({
