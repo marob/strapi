@@ -4,6 +4,7 @@ import {
   LoadingIndicatorPage,
   SearchURLQuery,
   SettingsPageTitle,
+  getFetchClient,
   useNotification,
   useQueryParams,
   useRBAC,
@@ -23,7 +24,6 @@ import { get } from 'lodash';
 import matchSorter from 'match-sorter';
 import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
-import { getFetchClient } from '../../../../../../../admin/src/utils/getFetchClient';
 import { useRolesList } from '../../../../../../../admin/src/hooks';
 import adminPermissions from '../../../../../../../admin/src/permissions';
 import EmptyRole from '../../../../../../../admin/src/pages/SettingsPage/pages/Roles/ListPage/components/EmptyRole';
