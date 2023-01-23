@@ -14,6 +14,7 @@ import {
   DynamicTable,
   useTracking,
   useGuidedTour,
+  useFetchClient,
   LinkButton,
 } from '@strapi/helper-plugin';
 import { HeaderLayout, ContentLayout } from '@strapi/design-system/Layout';
@@ -21,7 +22,6 @@ import { Main } from '@strapi/design-system/Main';
 import { Button } from '@strapi/design-system/Button';
 import Plus from '@strapi/icons/Plus';
 
-import { useFetchClient } from '../../../../../hooks';
 import adminPermissions from '../../../../../permissions';
 import tableHeaders from './utils/tableHeaders';
 import TableRows from './DynamicTable';
