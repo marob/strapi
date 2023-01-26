@@ -12,6 +12,7 @@ window.strapi = {
   telemetryDisabled: process.env.STRAPI_TELEMETRY_DISABLED ?? false,
   features: {
     SSO: 'sso',
+    AUDIT_LOGS: 'audit-logs',
   },
   projectType: 'Community',
 };
@@ -39,8 +40,7 @@ const run = async () => {
     window.strapi.isEE = isEE;
     window.strapi.features = {
       ...window.strapi.features,
-      allFeatures: features,
-      isEnabled: (f) => features.includes(f),
+      isEnabled: (featureName) => features.some((feature) => feature.name === featureName),
     };
 
     window.strapi.projectType = isEE ? 'Enterprise' : 'Community';
