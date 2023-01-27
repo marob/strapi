@@ -4,12 +4,12 @@ import { ThemeProvider, lightTheme } from '@strapi/design-system';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider, QueryClient } from 'react-query';
 
-import { getFetchClient } from '@strapi/helper-plugin';
+import { useFetchClient } from '@strapi/helper-plugin';
 import RelationMultiple from '../index';
 
 jest.mock('@strapi/helper-plugin', () => ({
   ...jest.requireActual('@strapi/helper-plugin'),
-  getFetchClient: jest.fn().mockReturnValue({
+  useFetchClient: jest.fn().mockReturnValue({
     get: jest.fn().mockResolvedValue({
       data: {
         results: [
@@ -70,13 +70,13 @@ describe('DynamicTable / Cellcontent / RelationMultiple', () => {
   it('renders and matches the snapshot', async () => {
     const { container } = render(<ComponentFixture />);
     expect(container).toMatchSnapshot();
-    const { get } = getFetchClient();
+    const { get } = useFetchClient();
     expect(get).toHaveBeenCalledTimes(0);
   });
 
   it('fetches relation entities once the menu is opened', async () => {
     const { container } = render(<ComponentFixture />);
-    const { get } = getFetchClient();
+    const { get } = useFetchClient();
     const button = container.querySelector('[type=button]');
 
     fireEvent(button, new MouseEvent('mousedown', { bubbles: true }));
