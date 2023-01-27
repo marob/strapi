@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useCallback } from 'react';
-import { useFetchClient, useNotification } from '@strapi/helper-plugin';
+import { getFetchClient, useNotification } from '@strapi/helper-plugin';
 import get from 'lodash/get';
 import init from './init';
 import reducer, { initialState } from './reducer';
@@ -10,8 +10,6 @@ const useRolesList = (shouldFetchData = true) => {
     init(initialState, shouldFetchData)
   );
 
-  const fetchClient = useFetchClient();
-
   useEffect(() => {
     if (shouldFetchData) {
       fetchRolesList();
@@ -20,6 +18,9 @@ const useRolesList = (shouldFetchData = true) => {
   }, [shouldFetchData]);
 
   const fetchRolesList = useCallback(async () => {
+    // TODO: evaluate to replace it with a useFetchClient when we work on the useCallback to remove
+    const fetchClient = getFetchClient();
+
     try {
       dispatch({
         type: 'GET_DATA',
@@ -47,8 +48,6 @@ const useRolesList = (shouldFetchData = true) => {
         });
       }
     }
-    // TODO: remove when we evaluate the need of the useCallback
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toggleNotification]);
 
   return { roles, isLoading, getData: fetchRolesList };
