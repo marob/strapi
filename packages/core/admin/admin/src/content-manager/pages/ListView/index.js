@@ -14,7 +14,7 @@ import {
   NoPermissions,
   CheckPermissions,
   SearchURLQuery,
-  getFetchClient,
+  useFetchClient,
   useFocusWhenNavigate,
   useQueryParams,
   useNotification,
@@ -96,6 +96,8 @@ function ListView({
   const { formatMessage } = useIntl();
   const contentType = layout.contentType;
   const hasDraftAndPublish = get(contentType, 'options.draftAndPublish', false);
+  const fetchClient = useFetchClient();
+  const { post, del } = fetchClient;
 
   // FIXME
   // Using a ref to avoid requests being fired multiple times on slug on change
@@ -104,8 +106,6 @@ function ListView({
 
   const fetchData = useCallback(
     async (endPoint, source) => {
-      // TODO: evaluate to replace it with a useFetchClient when we work on the useCallback to remove
-      const fetchClient = getFetchClient();
       getData();
 
       try {
@@ -155,13 +155,11 @@ function ListView({
         });
       }
     },
-    [formatMessage, getData, getDataSucceeded, notifyStatus, push, toggleNotification]
+    [formatMessage, getData, getDataSucceeded, notifyStatus, push, toggleNotification, fetchClient]
   );
 
   const handleConfirmDeleteAllData = useCallback(
     async (ids) => {
-      // TODO: evaluate to replace it with a useFetchClient when we work on the useCallback to remove
-      const { post } = getFetchClient();
       try {
         await post(getRequestUrl(`collection-types/${slug}/actions/bulkDelete`), {
           ids,
@@ -177,13 +175,11 @@ function ListView({
         });
       }
     },
-    [fetchData, params, slug, toggleNotification]
+    [fetchData, params, slug, toggleNotification, post]
   );
 
   const handleConfirmDeleteData = useCallback(
     async (idToDelete) => {
-      // TODO: evaluate to replace it with a useFetchClient when we work on the useCallback to remove
-      const { del } = getFetchClient();
       try {
         await del(getRequestUrl(`collection-types/${slug}/${idToDelete}`));
 
@@ -207,7 +203,7 @@ function ListView({
         });
       }
     },
-    [slug, params, fetchData, toggleNotification, formatMessage]
+    [slug, params, fetchData, toggleNotification, formatMessage, del]
   );
 
   useEffect(() => {
