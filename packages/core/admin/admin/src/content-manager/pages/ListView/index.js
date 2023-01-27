@@ -14,7 +14,7 @@ import {
   NoPermissions,
   CheckPermissions,
   SearchURLQuery,
-  useFetchClient,
+  getFetchClient,
   useFocusWhenNavigate,
   useQueryParams,
   useNotification,
@@ -94,7 +94,6 @@ function ListView({
   const { pathname } = useLocation();
   const { push } = useHistory();
   const { formatMessage } = useIntl();
-  const fetchClient = useFetchClient();
   const contentType = layout.contentType;
   const hasDraftAndPublish = get(contentType, 'options.draftAndPublish', false);
 
@@ -105,6 +104,8 @@ function ListView({
 
   const fetchData = useCallback(
     async (endPoint, source) => {
+      // TODO: evaluate to replace it with a useFetchClient when we work on the useCallback to remove
+      const fetchClient = getFetchClient();
       getData();
 
       try {
@@ -154,15 +155,15 @@ function ListView({
         });
       }
     },
-    // TODO: remove when we evaluate the need of the useCallback
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [formatMessage, getData, getDataSucceeded, notifyStatus, push, toggleNotification]
   );
 
   const handleConfirmDeleteAllData = useCallback(
     async (ids) => {
+      // TODO: evaluate to replace it with a useFetchClient when we work on the useCallback to remove
+      const { post } = getFetchClient();
       try {
-        await fetchClient.post(getRequestUrl(`collection-types/${slug}/actions/bulkDelete`), {
+        await post(getRequestUrl(`collection-types/${slug}/actions/bulkDelete`), {
           ids,
         });
 
@@ -176,15 +177,15 @@ function ListView({
         });
       }
     },
-    // TODO: remove when we evaluate the need of the useCallback
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [fetchData, params, slug, toggleNotification]
   );
 
   const handleConfirmDeleteData = useCallback(
     async (idToDelete) => {
+      // TODO: evaluate to replace it with a useFetchClient when we work on the useCallback to remove
+      const { del } = getFetchClient();
       try {
-        await fetchClient.del(getRequestUrl(`collection-types/${slug}/${idToDelete}`));
+        await del(getRequestUrl(`collection-types/${slug}/${idToDelete}`));
 
         const requestUrl = getRequestUrl(`collection-types/${slug}${params}`);
         fetchData(requestUrl);
@@ -206,8 +207,6 @@ function ListView({
         });
       }
     },
-    // TODO: remove when we evaluate the need of the useCallback
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [slug, params, fetchData, toggleNotification, formatMessage]
   );
 
@@ -227,7 +226,6 @@ function ListView({
 
       source.cancel('Operation canceled by the user.');
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canRead, getData, slug, params, getDataSucceeded, fetchData]);
 
   const defaultHeaderLayoutTitle = formatMessage({
