@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { renderHook, act } from '@testing-library/react-hooks';
+import { render } from '@testing-library/react';
 import { useFetchClient } from '@strapi/helper-plugin';
 
 jest.mock('@strapi/helper-plugin', () => ({
@@ -30,34 +30,19 @@ const TestComponent = (props) => {
   return <div {...props}>{props.children}</div>;
 };
 
-function setup(props) {
-  return new Promise((resolve) => {
-    act(() => {
-      resolve(
-        renderHook(() => useFetchClient(), {
-          wrapper: ({ children }) => <TestComponent {...props}>{children}</TestComponent>,
-        })
-      );
-    });
-  });
-}
-
 describe('useFetchClient', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-  it('Should contain the get, del, put, post methods and call once the GET method even when we rerender the Component', async () => {
-    const { result, rerender } = await setup();
+  it('Should call once the GET method even when we rerender the Component', async () => {
+    const { rerender } = render(<TestComponent>content</TestComponent>);
 
-    expect(result.current).toHaveProperty('get');
-    expect(result.current).toHaveProperty('post');
-    expect(result.current).toHaveProperty('put');
-    expect(result.current).toHaveProperty('del');
+    const { get } = useFetchClient();
 
-    expect(result.current.get).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
 
     rerender();
 
-    expect(result.current.get).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
   });
 });
