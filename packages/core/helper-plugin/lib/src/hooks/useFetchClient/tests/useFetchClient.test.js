@@ -1,18 +1,9 @@
-import React from 'react';
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react-hooks';
 
 import useFetchClient from '../index';
 
-function setup(props) {
-  return new Promise((resolve) => {
-    act(() => {
-      resolve(
-        renderHook(() => useFetchClient(), {
-          wrapper: ({ children }) => <div {...props}>{children}</div>,
-        })
-      );
-    });
-  });
+function setup() {
+  return renderHook(() => useFetchClient());
 }
 
 describe('useFetchClient', () => {
