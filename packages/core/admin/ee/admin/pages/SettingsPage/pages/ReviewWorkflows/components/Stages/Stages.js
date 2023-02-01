@@ -1,9 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Box, Stack } from '@strapi/design-system';
+import { useIntl } from 'react-intl';
+import { useDispatch } from 'react-redux';
+import { Box, Flex, Stack } from '@strapi/design-system';
 
+import { addStage } from '../../actions';
 import { StageType } from '../../constants';
+import { AddStage } from '../AddStage';
 import { Stage } from './Stage';
 
 const StagesContainer = styled(Box)`
@@ -18,18 +22,32 @@ const Background = styled(Box)`
 `;
 
 function Stages({ stages }) {
-  return (
-    <StagesContainer spacing={4}>
-      <Background background="neutral200" height="100%" width={2} zIndex={1} />
+  const { formatMessage } = useIntl();
+  const dispatch = useDispatch();
 
-      <Stack spacing={6} zIndex={2} position="relative" as="ol">
-        {stages.map(({ id, ...stage }) => (
-          <Box key={`stage-${id}`} as="li">
-            <Stage {...{ ...stage, id }} />
-          </Box>
-        ))}
-      </Stack>
-    </StagesContainer>
+  return (
+    <Flex direction="column" gap={6} width="100%">
+      <StagesContainer spacing={4} width="100%">
+        <Background background="neutral200" height="100%" width={2} zIndex={1} />
+
+        <Stack spacing={6} zIndex={2} position="relative" as="ol">
+          {stages.map((stage, index) => (
+            <Box key={`stage-${stage.id}`} as="li">
+              <Stage {...stage} index={index} canDelete={stages.length > 1} isOpen={!stage.id} />
+            </Box>
+          ))}
+        </Stack>
+      </StagesContainer>
+
+      <Flex spacing={6}>
+        <AddStage type="button" onClick={() => dispatch(addStage())}>
+          {formatMessage({
+            id: 'Settings.review-workflows.stage.add',
+            defaultMessage: 'Add new stage',
+          })}
+        </AddStage>
+      </Flex>
+    </Flex>
   );
 }
 
