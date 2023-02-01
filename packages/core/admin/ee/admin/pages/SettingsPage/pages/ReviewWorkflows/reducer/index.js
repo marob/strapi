@@ -1,4 +1,5 @@
-import produce from 'immer';
+import { current, original, produce } from 'immer';
+import isEqual from 'lodash/isEqual';
 
 import {
   ACTION_SET_WORKFLOWS,
@@ -53,7 +54,10 @@ export function reducer(state = initialState, action) {
           stages: currentWorkflow.data.stages.filter((stage) => stage.id !== stageId),
         };
 
-        draft.clientState.currentWorkflow.isDirty = true;
+        draft.clientState.currentWorkflow.isDirty = !isEqual(
+          original(draft.clientState.currentWorkflow).data,
+          state.clientState.currentWorkflow.data
+        );
 
         break;
       }
@@ -72,7 +76,10 @@ export function reducer(state = initialState, action) {
           ],
         };
 
-        draft.clientState.currentWorkflow.isDirty = true;
+        draft.clientState.currentWorkflow.isDirty = !isEqual(
+          current(draft.clientState.currentWorkflow).data,
+          state.clientState.currentWorkflow.data
+        );
 
         break;
       }
