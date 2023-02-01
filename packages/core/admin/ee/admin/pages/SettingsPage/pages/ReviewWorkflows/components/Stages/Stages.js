@@ -31,11 +31,21 @@ function Stages({ stages }) {
         <Background background="neutral200" height="100%" width={2} zIndex={1} />
 
         <Stack spacing={6} zIndex={2} position="relative" as="ol">
-          {stages.map((stage, index) => (
-            <Box key={`stage-${stage.id}`} as="li">
-              <Stage {...stage} index={index} canDelete={stages.length > 1} isOpen={!stage.id} />
-            </Box>
-          ))}
+          {stages.map((stage, index) => {
+            const stableStageId = stage?.id ?? stage.__temp_key__;
+
+            return (
+              <Box key={`stage-${stableStageId}`} as="li">
+                <Stage
+                  {...stage}
+                  id={stableStageId}
+                  index={index}
+                  canDelete={stages.length > 1}
+                  isOpen={!stage.id}
+                />
+              </Box>
+            );
+          })}
         </Stack>
       </StagesContainer>
 

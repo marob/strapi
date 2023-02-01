@@ -51,11 +51,13 @@ export function reducer(state = initialState, action) {
 
         draft.clientState.currentWorkflow.data = {
           ...currentWorkflow.data,
-          stages: currentWorkflow.data.stages.filter((stage) => stage.id !== stageId),
+          stages: currentWorkflow.data.stages.filter(
+            (stage) => stage?.id ?? stage.__temp_key__ !== stageId
+          ),
         };
 
         draft.clientState.currentWorkflow.isDirty = !isEqual(
-          original(draft.clientState.currentWorkflow).data,
+          current(draft.clientState.currentWorkflow).data,
           state.clientState.currentWorkflow.data
         );
 
@@ -70,7 +72,7 @@ export function reducer(state = initialState, action) {
           stages: [
             ...currentWorkflow.data.stages,
             {
-              // TODO: add id
+              __temp_key__: state.clientState.currentWorkflow.data.stages.length + 1,
               name: '',
             },
           ],
