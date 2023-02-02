@@ -1,14 +1,16 @@
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { useFetchClient, useNotification } from '@strapi/helper-plugin';
 
-const QUERY_KEY = 'review-workflows';
+const QUERY_BASE_KEY = 'review-workflows';
+
+/* eslint-disable no-unreachable */
 
 export function useReviewWorkflows(workflowId) {
   const { get, put } = useFetchClient();
   const toggleNotification = useNotification();
+  const queryClient = useQueryClient();
 
   async function fetchWorkflows() {
-    // eslint-disable-next-line no-unreachable
     try {
       return [
         {
@@ -22,6 +24,7 @@ export function useReviewWorkflows(workflowId) {
         },
       ];
 
+      // TODO
       const {
         data: { data },
       } = await get(`/admin/review-workflows/workflows/${workflowId ?? ''}?populate=stages`);
@@ -43,6 +46,7 @@ export function useReviewWorkflows(workflowId) {
       ],
     };
 
+    // TODO
     try {
       const {
         data: { data },
@@ -58,7 +62,7 @@ export function useReviewWorkflows(workflowId) {
     return workflowUpdateMutation.mutateAsync(payload);
   }
 
-  const workflows = useQuery([QUERY_KEY, workflowId ?? 'default'], fetchWorkflows);
+  const workflows = useQuery([QUERY_BASE_KEY, workflowId ?? 'default'], fetchWorkflows);
 
   const workflowUpdateMutation = useMutation(updateRemoteWorkflow, {
     async onError() {
@@ -69,6 +73,8 @@ export function useReviewWorkflows(workflowId) {
     },
 
     async onSuccess() {
+      queryClient.refetchQueries([QUERY_BASE_KEY]);
+
       toggleNotification({
         type: 'success',
         message: { id: 'notification.success.saved', defaultMessage: 'Saved' },
