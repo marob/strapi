@@ -50,7 +50,7 @@ function Stages({ stages }) {
       </StagesContainer>
 
       <Flex spacing={6}>
-        <AddStage type="button" onClick={() => dispatch(addStage())}>
+        <AddStage type="button" onClick={() => dispatch(addStage({ name: '' }))}>
           {formatMessage({
             id: 'Settings.review-workflows.stage.add',
             defaultMessage: 'Add new stage',

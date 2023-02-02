@@ -18,7 +18,7 @@ import {
 import { Trash } from '@strapi/icons';
 
 import { StageType } from '../../../constants';
-import { deleteStage } from '../../../actions';
+import { deleteStage, updateStage } from '../../../actions';
 
 // TODO: Delete once https://github.com/strapi/design-system/pull/858
 // is merged and released.
@@ -26,6 +26,11 @@ const StyledAccordion = styled(Box)`
   > div:first-child {
     box-shadow: ${({ theme }) => theme.shadows.tableShadow};
   }
+`;
+
+// TODO: Keep an eye on https://github.com/strapi/design-system/pull/878
+const DeleteButton = styled(IconButton)`
+  background-color: transparent;
 `;
 
 function Stage({ id, name, index, canDelete, isOpen: isOpenDefault = false }) {
@@ -43,7 +48,8 @@ function Stage({ id, name, index, canDelete, isOpen: isOpenDefault = false }) {
           togglePosition="left"
           action={
             canDelete ? (
-              <IconButton
+              <DeleteButton
+                noBorder
                 onClick={() => dispatch(deleteStage(id))}
                 label={formatMessage({
                   id: 'Settings.review-workflows.stage.delete',
@@ -66,6 +72,10 @@ function Stage({ id, name, index, canDelete, isOpen: isOpenDefault = false }) {
                   defaultMessage: 'Stage name',
                 })}
                 error={meta.error ?? false}
+                onChange={(event) => {
+                  dispatch(updateStage(id, { name: event.target.value }));
+                  field.onChange(event);
+                }}
               />
             </GridItem>
           </Grid>

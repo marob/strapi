@@ -3,6 +3,7 @@ import {
   ACTION_SET_WORKFLOW,
   ACTION_DELETE_STAGE,
   ACTION_ADD_STAGE,
+  ACTION_UPDATE_STAGE,
 } from '../constants';
 
 export function setWorkflows({ status, data }) {
@@ -33,8 +34,19 @@ export function deleteStage(stageId) {
   };
 }
 
-export function addStage() {
+export function addStage(stage = {}) {
   return {
     type: ACTION_ADD_STAGE,
+    payload: stage,
+  };
+}
+
+export function updateStage(id, payload) {
+  return {
+    type: ACTION_UPDATE_STAGE,
+    payload: {
+      id,
+      data: payload,
+    },
   };
 }
